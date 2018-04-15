@@ -1,5 +1,7 @@
 // The Script to add ERF responses to the district directory! 
-// 
+// Author: Tyler Reimold <tyler.reimold@nycirclek.org> <tylerreimold@gmail.com>
+// Date Created: April 15th, 2018
+//
 // Instructions: 
 // 
 // This script should be attached to the ERF responses spreadsheet and run from there. It will append the data from that sheet into
@@ -20,49 +22,232 @@ function addToDirectory() {
   const RESPONSES_FILE_SHEET_NAME = "Form Responses 1"
   
   // This is the column in which the college names are found.
-  const COLLEGE = 3;
+  const COLLEGE = 4;
   // The column of the president's name
-  const PRES_NAME = 7;
+  const PRES_NAME = 8;
   // The column of the president's email
-  const PRES_EMAIL = 8;
-   
+  const PRES_EMAIL = 9;
+  // The column of the president's phone number
+  const PRES_PHONE = 10;
+  // The column of the co-president's name
+  const COPRES_NAME = 11;
+  // The column of the co-president's email
+  const COPRES_EMAIL = 12;
+  // The column of the co-president's phone number
+  const COPRES_PHONE = 13;  
+  // The column of the VP's name
+  const VP_NAME = 14;  
+  // The column of the VP's email
+  const VP_EMAIL = 15;
+  // The column of the VP's phone number
+  const VP_PHONE = 16;  
+  // The column of the Secretaries name
+  const SEC_NAME = 17;
+  // The column of the Secretaries email
+  const SEC_EMAIL = 18;
+  // The column of the Secretaries phone number
+  const SEC_PHONE = 19;
+  // The column of the Treasurer's name
+  const TRES_NAME = 20;
+  // The column of the Treasurer's email
+  const TRES_EMAIL = 21;
+  // The column of the Treasurer's phone number
+  const TRES_PHONE = 22;
+  // The column of the Editor's name
+  const ED_NAME = 23;
+  // The column of the Editor's email
+  const ED_EMAIL = 24;
+  // The column of the Editor's phone number
+  const ED_PHONE = 25;
+  // The column of the Webmaster's name
+  const WEB_NAME = 26;
+  // The column of the Webmaster's email
+  const WEB_EMAIL = 27;
+  // The column of the Webmaster's phone number
+  const WEB_PHONE = 28;
+  // The column of the Faculty Advisors's name
+  const FA_NAME = 30;
+  // The column of the Faculty Advisors's email
+  const FA_EMAIL = 31;
+  // The column of the Faculty Advisors's phone
+  const FA_PHONE = 32;
+  // The sponsoring Kiwanis of the club
+  const SPONSORING_KIWANIS = 33;
+  // The column of the Kiwanis Advisors's name
+  const KA_NAME = 34;
+  // The column of the Kiwanis Advisors's email
+  const KA_EMAIL = 35;
+  // The column of the Kiwanis Advisors's phone
+  const KA_PHONE = 36;
+  // The sponsoring Kiwanis of the club
+  const SECOND_SPONSORING_KIWANIS = 37;  
+  // The column of the 2nd Kiwanis Advisors's name
+  const KA2_NAME = 38;
+  // The column of the 2nd Kiwanis Advisors's email
+  const KA2_EMAIL = 39;
+  // The column of the 2nd Kiwanis Advisors's phone
+  const KA2_PHONE = 40;  
+  
   // **********************************************************************************************************************************************
+  
+  
   // A dictionary that has all of the different clubs
   var club_dict = {};
   
   // Get the responses spreadsheet. It should be the active sheet assuming this was run from a sheets project.
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var response_sheet = spreadsheet.getSheetByName(RESPONSES_FILE_SHEET_NAME);
-  var responses = response_sheet.getDataRange().getValues();
+  var responses = response_sheet.getDataRange();
   
   // Parse all of the club names and their Divisions!
   var club_spreadsheet = SpreadsheetApp.openById(CLUB_LIST_KEY);
-  var clubs = club_spreadsheet.getDataRange().getValues();
-  //Logger.log(clubs[4][7]);
-  var i = 0;
-  var j = 1;
-  while ( !clubs[0][i].equals("")) {
-    while (!clubs[j][i].equals("")) {
-      var club = clubs[j][i];
-      Logger.log(clubs[j][i]);
-      j++;
+  var club_range = club_spreadsheet.getDataRange();
+  var numRows = club_range.getNumRows();
+  var numCols = club_range.getNumColumns();
+  for (var i = 1; i <= numCols; i++) {
+    var division = club_range.getCell(1, i);
+    for (var j = 2; j <= numRows; j++) {
+      var cell = club_range.getCell(j, i);
+      if (!cell.isBlank()) {
+        var val = cell.getValue();
+        club_dict[val] = {};
+        // Add the found clubs to the club dict
+        club_dict[val].division = division.getValue();
+      }
     }
-    j = 1;
-    i++;
   }
   
-  var current_college, hh;
-  for (var i = 1; i < responses.length; i++) {
-    
-  
-    //Logger.log(responses[i][PRES_NAME]);
+  // Parse the responses...
+  // TODO The code inside the if statement should be in it's own function.
+  numRows = responses.getNumRows();
+  numCols = responses.getNumColumns();
+  for (var i = 2; i <= numRows; i++) {
+    var club_row = responses.get
+    var club = responses.getCell(i, COLLEGE);
+    // Create empty array to store members
+    var members = [];
+    // Add president to member list
+    if (!responses.getCell(i, PRES_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, PRES_NAME).getValue();
+      newMember.position = "President";
+      newMember.position_type = "President"
+      newMember.email = responses.getCell(i, PRES_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, PRES_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add CO-President to member list
+    if (!responses.getCell(i, COPRES_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, COPRES_NAME).getValue();
+      newMember.position = "President";
+      newMember.position_type = "President"
+      newMember.email = responses.getCell(i, COPRES_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, COPRES_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add VP to member list
+    if (!responses.getCell(i, VP_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, VP_NAME).getValue();
+      newMember.position = "Vice President";
+      newMember.position_type = "Vice President"
+      newMember.email = responses.getCell(i, VP_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, VP_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add Secretary to member list
+    if (!responses.getCell(i, SEC_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, SEC_NAME).getValue();
+      newMember.position = "Secretary";
+      newMember.position_type = "Secretary"
+      newMember.email = responses.getCell(i, SEC_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, SEC_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add Treasurer to member list
+    if (!responses.getCell(i, TRES_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, TRES_NAME).getValue();
+      newMember.position = "Treasurer";
+      newMember.position_type = "Treasurer"
+      newMember.email = responses.getCell(i, TRES_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, TRES_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add Editor to member list
+    if (!responses.getCell(i, ED_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, ED_NAME).getValue();
+      newMember.position = "Editor";
+      newMember.position_type = "Editor/Webmaster"
+      newMember.email = responses.getCell(i, ED_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, ED_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add Webmaster to member list
+    if (!responses.getCell(i, WEB_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, WEB_NAME).getValue();
+      newMember.position = "Webmaster";
+      newMember.position_type = "Editor/Webmaster"
+      newMember.email = responses.getCell(i, WEB_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, WEB_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add Kiwanis Advisor to member list
+    if (!responses.getCell(i, KA_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, KA_NAME).getValue();
+      newMember.position = "Kiwanis Advisor";
+      newMember.position_type = "Kiwanis Advisor"      
+      newMember.email = responses.getCell(i, KA_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, KA_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add Second Kiwanis Advisor to member list
+    if (!responses.getCell(i, KA2_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, KA2_NAME).getValue();
+      newMember.position = "Kiwanis Advisor";
+      newMember.position_type = "Kiwanis Advisor" 
+      newMember.email = responses.getCell(i, KA2_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, KA2_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add Faculty Advisor to member list
+    if (!responses.getCell(i, FA_NAME).isBlank()) {
+      var newMember = {};
+      newMember.name = responses.getCell(i, FA_NAME).getValue();
+      newMember.position = "Faculty Advisor";
+      newMember.position_type = "Faculty Advisor" 
+      newMember.email = responses.getCell(i, FA_EMAIL).getValue();
+      newMember.phone = responses.getCell(i, FA_PHONE).getValue();
+      members.push(newMember);
+    }
+    // Add members to their corresponding club object
+    club_dict[club.getValue()].members = members;
   }
   
-  
-  
+  // Add results to the Directory!
   spreadsheet = SpreadsheetApp.openById(DIRECTORY_FILE_KEY);
   SpreadsheetApp.setActiveSpreadsheet(spreadsheet);
   sheet = spreadsheet.getSheetByName(DIRECTORY_FILE_SHEET_NAME);
+  for (var club in club_dict) {
+    var data = club_dict[club];
+    // If the script parsed members from the responses sheet
+    if (data.members) {
+      for (var key in data.members) {
+        var member = data.members[key];
+        var rowContents = [data.division, club, member.position_type, member.position, member.name, member.email, member.phone]
+        sheet.appendRow(rowContents)
+      }
+
+
+    }
+
+  }
 
   
 }
